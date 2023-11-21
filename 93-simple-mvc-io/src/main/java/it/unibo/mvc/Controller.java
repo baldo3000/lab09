@@ -1,6 +1,8 @@
 package it.unibo.mvc;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Application controller. Performs the I/O.
@@ -31,6 +33,12 @@ public class Controller {
 
     public String getCurrentFilePath() {
         return this.currentFile.getAbsolutePath();
+    }
+
+    public void save(final String message) throws IOException {
+        try (final FileWriter fw = new FileWriter(this.currentFile)) {
+            fw.write(message);
+        }
     }
 
 }
