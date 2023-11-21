@@ -10,12 +10,13 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -42,7 +43,7 @@ public class BadIOGUI {
         final JPanel canvas = new JPanel();
         canvas.setLayout(new BorderLayout());
         final JButton write = new JButton("Write on file");
-        canvas.add(write, BorderLayout.CENTER);
+        // canvas.add(write, BorderLayout.CENTER);
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /*
@@ -56,13 +57,33 @@ public class BadIOGUI {
                  * 
                  * This makes the Event Dispatch Thread (EDT) work on an I/O
                  * operation. I/O operations may take a long time, during which
-                 * your UI becomes completely unresponsive.
+                 * yoFur UI becomes completely unresponsive.
                  */
                 try (PrintStream ps = new PrintStream(PATH, StandardCharsets.UTF_8)) {
                     ps.print(randomGenerator.nextInt());
                 } catch (IOException e1) {
                     JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
                     e1.printStackTrace(); // NOPMD: allowed as this is just an exercise
+                }
+            }
+        });
+        // Ex 01.01
+        final JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.X_AXIS));
+        myPanel.add(write, BorderLayout.CENTER);
+        canvas.add(myPanel, BorderLayout.CENTER);
+        // Ex 01.02-01.03
+        final JButton read = new JButton("Read from file");
+        myPanel.add(read);
+        read.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // System.out.println("A random number: " + randomGenerator.nextInt());
+                try (final BufferedReader br = new BufferedReader(new InputStreamReader((new FileInputStream(PATH)), StandardCharsets.UTF_8))) {
+                    System.out.println(br.readLine());
+                } catch (IOException e2) {
+                    JOptionPane.showMessageDialog(frame, e2, "Error", JOptionPane.ERROR_MESSAGE);
+                    e2.printStackTrace(); // NOPMD: allowed as this is just an exercise
                 }
             }
         });
@@ -87,6 +108,8 @@ public class BadIOGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        // Ex 01.01
+        frame.pack();
         /*
          * OK, ready to push the frame onscreen
          */
@@ -99,6 +122,6 @@ public class BadIOGUI {
      * @param args ignored
      */
     public static void main(final String... args) {
-       new BadIOGUI().display();
+        new BadIOGUI().display();
     }
 }
