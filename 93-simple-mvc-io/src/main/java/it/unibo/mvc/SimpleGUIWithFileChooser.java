@@ -7,10 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -45,7 +41,7 @@ public final class SimpleGUIWithFileChooser {
         this.frame.getContentPane().add(mainPanel);
         // Text Area
         final JTextArea textArea = new JTextArea();
-        loadTextArea(textArea, controller.getCurrentFile().toPath());
+        textArea.setText(controller.load());
         mainPanel.add(textArea, BorderLayout.CENTER);
         // Save button
         final JButton saveButton = new JButton(SAVE);
@@ -83,7 +79,7 @@ public final class SimpleGUIWithFileChooser {
                     final File selectedFile = fc.getSelectedFile();
                     textField.setText(selectedFile.getAbsolutePath());
                     controller.setCurrentFile(selectedFile);
-                    loadTextArea(textArea, controller.getCurrentFile().toPath());
+                    textArea.setText(controller.load());
                 } else if (selection == JFileChooser.CANCEL_OPTION) {
 
                 } else {
@@ -93,16 +89,6 @@ public final class SimpleGUIWithFileChooser {
             }
 
         });
-    }
-
-    private void loadTextArea(final JTextArea textArea, final Path filePath) {
-        try {
-            textArea.setText(Files.readString(filePath));
-        } catch (final NoSuchFileException e1) {
-
-        } catch (final IOException e2) {
-            JOptionPane.showMessageDialog(frame, e2, "Error in reading file", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     public void display() {

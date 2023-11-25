@@ -3,6 +3,8 @@ package it.unibo.mvc;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 
 /**
  * Application controller. Performs the I/O.
@@ -38,6 +40,16 @@ public class Controller {
     public void save(final String message) throws IOException {
         try (final FileWriter fw = new FileWriter(this.currentFile)) {
             fw.write(message);
+        }
+    }
+
+    public String load() {
+        try {
+            return Files.readString(this.currentFile.toPath());
+        } catch (final NoSuchFileException e1) {
+            return "";
+        } catch (final IOException e2) {
+            return "";
         }
     }
 
