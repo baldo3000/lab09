@@ -30,7 +30,7 @@ public final class SimpleController implements Controller {
     }
 
     public List<String> getTextHistory() {
-        return this.textHistory;
+        return List.copyOf(this.textHistory);
     }
 
     public void printText() {
